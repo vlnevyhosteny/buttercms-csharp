@@ -1,0 +1,27 @@
+# This workflow opens and updates a pull request with a new package version
+# based on code changes.
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release-please
+
+jobs:
+  release-please:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: google-github-actions/release-please-action@v3.7.10
+        with:
+          release-type: simple
+          package-name: release-please-action
+          pull-request-title-pattern: 'chore(release): ${version}'
+          pull-request-header: ':robot: Merge this PR to release a new version'
+          extra-files: |
+            README.md
+            ButterCMS/ButterCMS.csproj
