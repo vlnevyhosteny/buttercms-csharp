@@ -9,3 +9,5 @@ When you are ready to release a new SDK version, make sure that all your code ch
 The `release-please` action opens and maintains a GitHub pull request with changes relevant to a new version release. Approve this pull request to release a new version of the SDK.
 
 After the release, the new version is automatically published into the npm registry (see the package [here](https://www.npmjs.com/package/buttercms)).
+
+feat
