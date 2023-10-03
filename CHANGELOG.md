@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/vlnevyhosteny/buttercms-csharp/compare/v2.0.0...v2.1.0) (2023-10-03)
+
+
+### Features
+
+* testing the release ([840c172](https://github.com/vlnevyhosteny/buttercms-csharp/commit/840c172dc7472e04699c3c0472b0d8a875910e73))
+
 ## 2.0.0 (2023-10-03)
 
 
