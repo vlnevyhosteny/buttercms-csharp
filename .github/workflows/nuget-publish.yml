@@ -2,7 +2,7 @@ name: NuGet Publish
 
 on:
   push:
-    branches: [ master ]
+    branches: [ publish-testing ]
 
 env:
   NUGET_DIR: ${{ github.workspace }}/nuget
