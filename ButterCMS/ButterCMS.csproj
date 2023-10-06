@@ -16,7 +16,7 @@
     <DefineConstants>HAVE_COM_ATTRIBUTES;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageId>ButterCMS</PackageId>
+    <PackageId>Vladss.ButterCMS</PackageId>
     <PackageVersion>2.0.0</PackageVersion> <!-- {x-release-please-version} -->
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>ButterCMS CMS</PackageTags>
