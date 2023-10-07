@@ -22,6 +22,8 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
 
+      - run: sed -E 's:RepositoryCommit>.+<\/:RepositoryCommit>${{ github.sha }}<\/:g' ButterCMS/ButterCMS.csproj > tmp && mv tmp ButterCMS/ButterCMS.csproj
+
       - run: dotnet pack --configuration Release --output ${{ env.NUGET_DIR }}
 
       - uses: actions/upload-artifact@v3
@@ -47,8 +49,7 @@ jobs:
         run: dotnet tool update Meziantou.Framework.NuGetPackageValidation.Tool --global
 
       - name: Validate nuget package
-        run: meziantou.validate-nuget-package $(ls ${{ env.NUGET_DIR }}/*.nupkg | head -n 1)
-        continue-on-error: true # TODO: remove this line when all packages are valid
+        run: meziantou.validate-nuget-package $(ls ${{ env.NUGET_DIR }}/*.nupkg | head -n 1) --excluded-rules Symbols
 
   publish:
     runs-on: ubuntu-latest
@@ -63,7 +64,7 @@ jobs:
         uses: actions/setup-dotnet@v3
 
       - name: Publish nuget package
-        run: dotnet nuget push $(ls ${{ env.NUGET_DIR }}/*.nupkg | head -n 1) --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push $(ls ${{ env.NUGET_DIR }}/*.nupkg | head -n 1) --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
 
   
 
