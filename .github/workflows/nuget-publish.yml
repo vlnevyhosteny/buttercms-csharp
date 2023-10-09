@@ -15,18 +15,18 @@ jobs:
 
   pack: 
     if: contains(github.event.head_commit.message, 'chore(release)') 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.5.3
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v3.2.0
 
       - run: sed -E -I'.bak' 's:RepositoryCommit>.+</:RepositoryCommit>${{ github.sha }}</:g' ButterCMS/ButterCMS.csproj ButterCMS/ButterCMS.csproj
 
-      - run: dotnet pack --configuration Release --output ${{ env.NUGET_DIR }}
+      - run: dotnet pack --configuration Release --output "${{ env.NUGET_DIR }}"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3.1.3
         with:
           name: ${{ env.NUGET_ARTIFACT }}
           path: ${{ env.NUGET_DIR }}
@@ -34,13 +34,13 @@ jobs:
           retention-days: 1
 
   validate-nuget:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: pack
     steps:
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v3.2.0
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v3.0.2
         with:
           name: ${{ env.NUGET_ARTIFACT }}
           path: ${{ env.NUGET_DIR }}
@@ -49,22 +49,22 @@ jobs:
         run: dotnet tool update Meziantou.Framework.NuGetPackageValidation.Tool --global
 
       - name: Validate nuget package
-        run: meziantou.validate-nuget-package $(ls ${{ env.NUGET_DIR }}/*.nupkg | head -n 1) --excluded-rules Symbols
+        run: for FILE in ${{ env.NUGET_DIR }}/*.nupkg; do meziantou.validate-nuget-package "$FILE" --excluded-rules Symbols; done
 
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [validate-nuget, testing]
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v3.0.2
         with:
           name: ${{ env.NUGET_ARTIFACT }}
           path: ${{ env.NUGET_DIR }}
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v3.2.0
 
       - name: Publish nuget package
-        run: dotnet nuget push $(ls ${{ env.NUGET_DIR }}/*.nupkg | head -n 1) --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
+        run: for FILE in ${{ env.NUGET_DIR }}/*.nupkg; do dotnet nuget push "$FILE" --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json; done
 
   
 
