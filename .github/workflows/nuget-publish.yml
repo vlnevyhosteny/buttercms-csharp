@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
 
-      - run: sed -E 's:RepositoryCommit>.+<\/:RepositoryCommit>${{ github.sha }}<\/:g' ButterCMS/ButterCMS.csproj > tmp && mv tmp ButterCMS/ButterCMS.csproj
+      - run: sed -E -I'.bak' 's:RepositoryCommit>.+</:RepositoryCommit>${{ github.sha }}</:g' ButterCMS/ButterCMS.csproj ButterCMS/ButterCMS.csproj
 
       - run: dotnet pack --configuration Release --output ${{ env.NUGET_DIR }}
 
